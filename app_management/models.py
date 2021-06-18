@@ -2,6 +2,10 @@ from django.db import models
 
 # Create your models here.
 import logging
+import datetime
+from django.db.models.expressions import Value
+from django.utils.translation import gettext as _
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
@@ -46,6 +50,16 @@ class AppUser(AbstractBaseUser):
     '''
     custom user model
     '''
+    SEX_CHOICES = [
+        ('she', 'She/her'),
+        ('he', 'He/him'),
+        ('they', 'They/them'),
+        ('none', 'I prefer not to say'),
+    ]
+
+
+    # def max_value_current_year(value):
+    #     return MaxValueValidator(datetime.date.today().year)(value) 
 
     username =  models.CharField(max_length=30, unique=True)
     avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
@@ -60,6 +74,12 @@ class AppUser(AbstractBaseUser):
                                     'has all permissions without explicitly assigning them.'))
     is_superuser = models.BooleanField(default=False)
     last_known_position = models.CharField(max_length=100, null=True, blank=True)
+    sex = models.CharField(max_length=10, choices=SEX_CHOICES, default='none')
+    birth_year = models.IntegerField(_('year'), validators=[MinValueValidator(1950),\
+                                    MaxValueValidator(datetime.date.today().year)],\
+                                    null=True, blank=True, help_text=('the birth year '\
+                                    'must be greater than 1950 and less than curren year'))
+    bio = models.TextField(blank=True, null=True)
 
     USERNAME_FIELD = 'email' # this field sets what to be used for login
     REQUIRED_FIELDS = ['username',]
