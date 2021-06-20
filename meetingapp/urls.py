@@ -16,11 +16,28 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from dj_rest_auth import urls as rest_auth_urls
+from django.contrib.auth.models import Group
+from django.contrib.sites.models import Site
+from rest_framework.authtoken.models import TokenProxy
+from allauth.account.models import EmailAddress
+from allauth.socialaccount.models import SocialAccount, SocialToken, SocialApp
+
+from app_management.urls import router
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     # path('api-auth/', include('rest_framework.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
-    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls'))
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('', include(router.urls))
 ]
+
+admin.site.unregister(Group)
+admin.site.unregister(TokenProxy)
+admin.site.unregister(SocialAccount)
+admin.site.unregister(SocialApp)
+admin.site.unregister(SocialToken)
+admin.site.unregister(Site)
+admin.site.unregister(EmailAddress)

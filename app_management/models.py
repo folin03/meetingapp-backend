@@ -7,7 +7,7 @@ from django.db.models.expressions import Value
 from django.utils.translation import gettext as _
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, User
 
 
 logger = logging.getLogger(__name__)
@@ -57,10 +57,6 @@ class AppUser(AbstractBaseUser):
         ('none', 'I prefer not to say'),
     ]
 
-
-    # def max_value_current_year(value):
-    #     return MaxValueValidator(datetime.date.today().year)(value) 
-
     username =  models.CharField(max_length=30, unique=True)
     avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
     email = models.EmailField(verbose_name='email', max_length=60, unique=True)
@@ -80,6 +76,7 @@ class AppUser(AbstractBaseUser):
                                     null=True, blank=True, help_text=('the birth year '\
                                     'must be greater than 1950 and less than curren year'))
     bio = models.TextField(blank=True, null=True)
+    is_visible = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email' # this field sets what to be used for login
     REQUIRED_FIELDS = ['username',]
@@ -103,3 +100,24 @@ class AppUser(AbstractBaseUser):
         return str(self.username)
     class Meta:
         verbose_name = 'App user'          #changes model name in the admin menu
+
+
+class UserStatus(models.Model):
+    title = models.CharField(max_length=100)
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    text = models.TextField(max_length=500)
+
+    def __str__(self) -> str:
+        return str(f"status: {self.user}, {self.title}")
+
+    class Meta:
+        verbose_name = 'User statuses'          #changes model name in the admin menu
+        verbose_name_plural = 'User statuses'
+
+
+class UserFriend(models.Model):
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    friend = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='friend')
+
+    def __str__(self) -> str:
+        return f"{self.user}'s friend {self.friend}"
