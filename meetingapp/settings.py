@@ -27,25 +27,29 @@ if DEBUG:
     from developer_settings import DJANGO_SECRET_KEY, DATABASE
 
     SECRET_KEY = DJANGO_SECRET_KEY
+
+    # Database
+    # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+    DATABASES = DATABASE
+
 else:
+    import dj_database_url
+
+    DATABASES = {
+    'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
+    } 
+
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
-    DATABASE = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'meetingapp',
-            'USER': 'martin',
-            'PASSWORD': 'Letmein86',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
-        }
-    }
+    
 
 
 
 
-ALLOWED_HOSTS = ['127.0.0.1']
+
+ALLOWED_HOSTS = ['127.0.0.1', 'meet-me-app.herokuapp.com']
 
 
 # Application definition
@@ -117,12 +121,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'meetingapp.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = DATABASE
 
 
 # Password validation
