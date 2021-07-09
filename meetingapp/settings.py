@@ -43,11 +43,8 @@ else:
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
-    
-
-
-
-
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'meet-me-app.herokuapp.com']
 
