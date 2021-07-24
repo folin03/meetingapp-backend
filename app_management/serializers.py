@@ -6,7 +6,7 @@ from .models import AppUser, UserStatus, UserFriend
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = AppUser
-        fields = '__all__'
+        fields = ['id', 'username', 'avatar', 'email', 'is_active', 'sex', 'birth_year', 'bio', 'is_visible']
 
 
 class UserStatusSerializer(serializers.HyperlinkedModelSerializer):

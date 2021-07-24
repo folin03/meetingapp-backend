@@ -21,6 +21,7 @@ from django.contrib.sites.models import Site
 from rest_framework.authtoken.models import TokenProxy
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount, SocialToken, SocialApp
+from app_management.views import verify_user_token
 
 from app_management.urls import router
 
@@ -31,7 +32,8 @@ urlpatterns = [
     # path('api-auth/', include('rest_framework.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('verify-user-token/', verify_user_token)
 ]
 
 admin.site.unregister(Group)

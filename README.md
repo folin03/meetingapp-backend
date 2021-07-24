@@ -12,6 +12,10 @@ GET, POST
 
 https://meet-me-app.herokuapp.com/user-statuses/
 
+GET
+
+https://meet-me-app.herokuapp.com/verify-user-token/
+
 POST
 
 https://meet-me-app.herokuapp.com/dj-rest-auth/login/
